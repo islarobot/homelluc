@@ -1,0 +1,97 @@
+
+main.js
+
+código comunicacion: c1_main
+fichero de arranque.
+lanza el servidor de comunicaciones, el servidor web, firefox y el sensor de usb.
+
+comms_server.js
+
+código de comunicacion: c2_comms
+servidor de comunicacion socket.
+hace de enlace entre el resto de ficheros.
+
+web_server.js
+
+código de comunicacion: c3_web
+web server de la aplicación
+
+ardu_comms.js
+
+código de comunicación: c4_ardu
+
+se comunica directamente con arduino
+
+usb_comms.js
+
+código: c5_usb
+
+identifica arduinos conectados.
+
+
+index.html
+
+cliente web.
+
+código: c6_clienteweb
+
+
+
+test
+test1
+
+
+
+message types:
+
+0: Cierre
+
+1: response usb port list
+
+Value: usb port list, -1 (si no hay)
+
+2: request usb list
+
+Value: blank
+
+3: select usb list
+
+Value: port
+
+4: confirmación proceso corriendo
+
+Value: null
+
+5: envio valor puerto a ardu
+
+value: puerto
+
+6: confirmación proceso abierto
+
+value: request: proceso
+		 response: ok
+
+
+10: abrir firefox
+
+11: Cerrar puerto serie.
+
+20: Confirmar puerto abierto
+
+21. Solicitud de estado
+
+22. Cierro ardu para actualizar
+
+
+100: envio información desde el arduino
+
+200 envio info al arduino.
+
+
+detectar cuando se inserta un usb.
+
+https://stackoverflow.com/questions/35843946/how-to-detect-usb-device-connected-using-node-js
+
+cuando ocurre eso, se refresca la lista.
+
+

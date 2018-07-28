@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Check Variables Arduino</title>
+    
+  </head>
+  <body onload='init()'>
+
+<div>DATOS</div>
+<p>
+<div id="X"></div>
+<p>
+<div id="Y"></div>
+
+
+	<script src="math.js" type="text/javascript"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+         <script src="//cdn.jsdelivr.net/p5.js/0.3.8/p5.min.js"></script>
+ <script type="text/javascript" src="//cdn.jsdelivr.net/p5.js/0.3.8/addons/p5.dom.js"></script>
+   <script src="compass.js"></script>
+
+        <link rel="stylesheet" href="progress/css/lib/control/progressbar.css" />
+        <script type="text/javascript" src="progress/lib/control/progressbar.min.js"></script>
+
+
+    <script>
+
+
+
+	var socket = io();
+	//recupera informacion del servicio node checkvariable.js
+      socket.on('data2', function(msg){
+      
+		showData(msg);
+
+		
+      });
+   
+
+
+
+
+function init(){
+
+
+
+}
+
+
+
+
+function showData(result) {
+
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+case "X:":
+document.getElementById("X").innerHTML = result;
+break;
+case "Y:":
+document.getElementById("Y").innerHTML = result;
+break;
+
+}
+}
+
+
+
+</script>
+
+
+  </body>
+</html>

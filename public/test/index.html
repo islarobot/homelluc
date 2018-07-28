@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Arduino Tool</title>
+    
+	<style>
+
+
+
+
+	/*----- Tabs -----*/
+	.tabs {
+    width:100%;
+    display:inline-block;
+}
+ 
+    /*----- Tab Links -----*/
+    /* Clearfix */
+    .tab-links:after {
+        display:block;
+        clear:both;
+        content:'';
+    }
+ 
+    .tab-links li {
+        margin:0px 5px;
+        float:left;
+        list-style:none;
+    }
+ 
+        .tab-links a {
+            padding:9px 15px;
+            display:inline-block;
+            border-radius:3px 3px 0px 0px;
+            background:#7FB5DA;
+            font-size:16px;
+            font-weight:600;
+            color:#4c4c4c;
+            transition:all linear 0.15s;
+        }
+ 
+        .tab-links a:hover {
+            background:#a7cce5;
+            text-decoration:none;
+        }
+ 
+    li.active a, li.active a:hover {
+        background:#fff;
+        color:#4c4c4c;
+    }
+ 
+    /*----- Content of Tabs -----*/
+    .tab-content {
+        padding:15px;
+        border-radius:3px;
+        box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
+        background:#fff;
+    }
+ 
+        .tab {
+            display:none;
+        }
+ 
+        .tab.active {
+            display:block;
+        }
+
+	#myProgress {
+    	position: relative;
+    	width: 100%;
+    	height: 30px;
+    	background-color: grey;
+	}
+	#myBar1 {
+    	position: absolute;
+    	width: 1%;
+    	height: 100%;
+    	background-color: blue;
+	}
+	#label1 {
+    	text-align: center; /* If you want to center it */
+    	line-height: 30px; /* Set the line-height to the same as the height of the progress bar container, to center it vertically */
+    	color: white;
+	}
+	.bar {
+    	position: absolute;
+    	width: 1%;
+    	height: 100%;
+    	background-color: green;
+	}
+	.lab {
+    	text-align: center; /* If you want to center it */
+    	line-height: 30px; /* Set the line-height to the same as the height of the progress bar container, to center it vertically */
+    	color: white;
+	}
+
+
+	.labdigital {
+	background-color: grey;
+  	color: white;
+  	padding: 4px;
+  	
+	width: 3%;
+    	height: 10%;
+	}
+
+
+	.onoffswitch {
+    position: relative; width: 55px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    height: 20px; padding: 0; line-height: 20px;
+    border: 0px solid #FFFFFF; border-radius: 30px;
+    background-color: #9E9E9E;
+}
+.onoffswitch-label:before {
+    content: "";
+    display: block; width: 30px; margin: -5px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 31px;
+    border-radius: 30px;
+    box-shadow: 0 6px 12px 0px #757575;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+    background-color: #42A5F5;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+   border-color: #42A5F5;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+    right: 0px; 
+    background-color: #2196F3; 
+    box-shadow: 3px 6px 18px 0px rgba(0, 0, 0, 0.2);
+}
+ 
+	</style>
+	
+    	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="js/custom.js"></script>
+	<script>
+
+	//var range1 = document.getElementById("myRange1");
+
+
+	jQuery(document).ready(function() {
+
+	 $("#cmn-toggle-1").on("click", function() {
+    		//alert(document.getElementById('cmn-toggle-1').checked);
+
+	var enviar = document.getElementById('cmn-toggle-1').checked;
+	senddata("M",enviar);
+	purplelight();
+  	});
+
+	 $("#slider1").on("change", function() {
+    		//alert(document.getElementById('cmn-toggle-1').checked);
+
+	var enviar = document.getElementById('slider1').value;
+	senddata("N",enviar);
+	purplelight();
+  	});
+
+    	jQuery('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+	});
+	});
+
+
+
+
+	var socket = io();
+
+	//envia info
+
+	
+
+
+	//recupera informacion del servicio node checkvariable.js
+      socket.on('valoresarduino', function(msg){
+      
+		showData(msg);
+		bluelight();
+
+		
+      });
+   
+
+	socket.on('sketchyy', function(msg){
+      
+	
+		changesketch(msg);
+
+		
+      });	
+
+     socket.on('estadosconexion', function(msg){
+      
+		showState(msg);
+
+		
+      });
+
+
+            $(function(){
+                $('#submit').click(function(){ /*listening to the button click using Jquery listener*/
+                    var data = { /*creating a Js ojbect to be sent to the server*/ 
+                        message:$('#message').val(), /*getting the text input data      */
+                        author:'karthic'                
+                    }
+			var data1 = $('#message').val();
+                    //socket.send(JSON.stringify(data));
+		 	socket.send(data1);
+                    /*Data can be sent to server very easily by using socket.send() method 
+                    The data has to be changed to a JSON before sending
+                                          it (JSON.stringify() does this job )*/
+                    /* This triggers a message event on the server side 
+                    and the event handler obtains the data sent */ 
+ 
+                    $('#message').val('');
+                    //Emptying the text box value using jquery 
+ 
+                });
+            });
+
+
+function init(){
+
+//document.getElementById("E").innerHTML = "Desconectado";
+
+
+
+}
+
+
+function changesketch(result) {
+
+//nuevapagina
+
+document.getElementById("labelsketch1").innerHTML = result;
+document.getElementById("labelsketch2").innerHTML = result;
+
+}
+
+function showState(result) {
+
+//alert(result);
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+case "C":
+//document.getElementById("E").innerHTML = "Connected";
+document.getElementById("conect").src="Circle_Green.png";
+break;
+case "D":
+//document.getElementById("E").innerHTML = "Disconnected";
+document.getElementById("conect").src="Circle_Red.png";
+break;
+case "T":
+//document.getElementById("E").innerHTML = "Disconnected";
+document.getElementById("conect").src="Circle_Purple.png";
+break;
+
+}
+
+}
+
+function showData(result) {
+
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+
+//analogo
+case "X:":
+
+movebar(result,1);
+break;
+case "Y:":
+
+movebar(result,2);
+break;
+
+//digital
+case "I:":
+
+changelabel(result,1);
+break;
+
+case "J:":
+
+changelabel(result,2);
+break;
+
+}
+}
+
+function bluelight(){
+
+document.getElementById("datain").src="Circle_Blue.png";
+//document.getElementById("datain").src="Circle_Grey.png";
+setTimeout(function(){document.getElementById("datain").src="Circle_Grey.png";}, 30);
+
+}
+
+
+function purplelight(){
+
+document.getElementById("dataout").src="Circle_Purple.png";
+//document.getElementById("datain").src="Circle_Grey.png";
+setTimeout(function(){document.getElementById("dataout").src="Circle_Grey.png";}, 50);
+//alert('hola');
+}
+
+
+function senddata(letra,valor){
+
+switch (letra){
+case "M":
+var cosa;
+if(valor == true){cosa = 1;}else{cosa = 0;}
+var stringenvio = 'M:'+ cosa;
+
+socket.send(stringenvio);
+
+break;
+
+case "N":
+
+
+var stringenvio = 'N:'+ valor;
+
+socket.send(stringenvio);
+
+break;
+
+case "U":
+var stringenvio = 'U:'+ valor;
+socket.send(stringenvio);
+break;
+
+case "B":
+var stringenvio = 'B:'+ valor;
+socket.send(stringenvio);
+break;
+
+//actuadores
+
+case "E":
+var stringenvio = 'E:'+ valor;
+socket.send(stringenvio);
+break;
+case "F":
+var stringenvio = 'F:'+ valor;
+socket.send(stringenvio);
+break;
+case "N":
+var stringenvio = 'N:'+ valor;
+socket.send(stringenvio);
+break;
+case "O":
+var stringenvio = 'O:'+ valor;
+socket.send(stringenvio);
+break;
+}
+
+
+}
+
+
+
+
+
+$(document).ready(function() {
+    $("#upload1").click(function(){
+       senddata('U',0);
+    }); 
+	$("#upload2").click(function(){
+       	senddata('U',0);
+    	}); 
+	 $("#edit1").click(function(){
+       edit(1);
+    }); 
+	$("#edit2").click(function(){
+       edit(2);
+    }); 
+	$("#build1").click(function(){
+	
+       senddata('B',0);
+    }); 
+	$("#build2").click(function(){
+	
+       senddata('B',0);
+    }); 
+
+	
+});
+
+
+
+function movebar(w,j) {
+	
+	var w2 = w.substring(2,w.length);
+	
+	var wid = 100*(w2/1000);
+    var elem = document.getElementById("myBar"+j);
+	//alert(w1);
+     elem.style.width = wid+'%';
+     document.getElementById("label"+j).innerHTML = w;
+        
+  
+}
+
+function changelabel(w,j) {
+	
+	var w2 = w.substring(2,w.length);
+	
+	var wid = 1*w2;
+    var elem = document.getElementById("labeld"+j);
+	//alert(w1);
+     
+	if(wid == 0){
+     document.getElementById('labeld'+j).innerHTML = 'FALSE';
+	document.getElementById('labeld'+j).style.backgroundColor='red'
+	}else{
+	document.getElementById('labeld'+j).innerHTML = 'TRUE';
+	document.getElementById('labeld'+j).style.backgroundColor='green'
+	}
+        
+  
+}
+
+function toggleCheckbox(pepe,item){
+
+//alert(item);
+switch(item){
+
+case 1:
+if(pepe.checked == true){
+senddata('N',1);
+}else{
+senddata('N',0);
+}
+break;
+case 2:
+if(pepe.checked == true){
+senddata('O',1);
+}else{
+senddata('O',0);
+}
+break;
+
+}
+
+}
+
+function changerange(value,item){
+
+var iterations = 1;
+
+switch(item){
+
+case 1:
+for(o=0;o<iterations;o++){
+senddata('E',value);
+}
+break;
+
+case 2:
+for(o=0;o<iterations;o++){
+senddata('F',value);
+}
+break;
+}
+}
+
+function edit(j){
+
+
+window.open('edit?file='+j, "_blank"," height=800, width=1000, left=100,menubar=no,status=no,titlebar=no,toolbar=no");
+
+//window.open('edit?file='+j);
+
+}
+
+
+	</script>
+
+  <!-- css -->
+
+ 
+   <link href="css/style.css" rel="stylesheet">
+
+  </head>
+  <body onload='init()'>
+
+<table width=100% border=1>
+<tr><td>
+<table width=40% border=0>
+
+<tr><td>Arduino State</td><td><img src="Circle_Red.png" id="conect" height="20" width="20"></td>
+<td>Data in</td><td> <img src="Circle_Grey.png" id="datain" height="20" width="20"> </td>
+<td>Data out</td><td>  <img src="Circle_Grey.png" id="dataout" height="20" width="20"> </td></tr>
+</table>
+
+
+</td></tr>
+
+<tr><td>
+
+
+<div class="tabs">
+    <ul class="tab-links">
+	<li class="active"><a href="#tab1">Basic Sensors</a></li>
+        <li><a href="#tab2">Basic Actuators</a></li>
+	<li><a href="#tab3">Advanced Sensors 1</a></li>
+        <li><a href="#tab4">Advanced Sensors 2</a></li>
+        <li><a href="#tab5">Remote Control</a></li>
+        
+    </ul>
+ 
+ <div class="tab-content">
+  <div id="tab1" class="tab active">
+		<p>
+		<div id="labelsketch1"></div>
+		<p>
+		<button type="button" id="edit1">Edit Sketch</button>
+		<button type="button" id="build1">Build Sketch</button>
+		<button type="button" id="upload1">Upload Sketch</button>
+		<p>
+		
+
+            	
+		<p>
+		<div>Analog Sensor 1 (X)</div>
+		<p>
+		<div id="myProgress">
+			<div id="myBar1" class="bar"><div id="label1" class="lab"></div></div>
+		</div>
+		<p>
+		<div>Analog Sensor 2 (Y)</div>
+		<p>
+		<div id="myProgress">
+			<div id="myBar2" class="bar"><div id="label2" class="lab"></div></div>
+		</div>
+		<p>
+		<div>Digital Sensor 1 </div>
+		<p>
+		<div id="labeld1" class="labdigital"></div>
+		
+		<p>	
+		<div>Digital Sensor 2 </div>
+		<p>
+		<div id="labeld2" class="labdigital"></div>
+		
+		<p>	
+		
+  </div>
+  <div id="tab2" class="tab">
+		<p>
+		<div id="labelsketch2"></div>
+		<p>
+		<button type="button" id="edit2">Edit Sketch</button>
+		<button type="button" id="build2">Build Sketch</button>
+		<button type="button" id="upload2">Upload Sketch</button>
+		<p>
+		
+
+            	
+		<p>
+		<div>Range Actuator 1</div>
+		<p>
+		<div id="myRange1r">
+			<input id="myRange2" type="range" min="0" max="1000" step="1" onchange="changerange(this.value,1)">
+		</div>
+		<p>
+		<div>Range Actuator 2</div>
+		<p>
+		<div id="myRange2r">
+			<input id="myRange2" type="range" min="0" max="1000" step="1" onchange="changerange(this.value,2)">
+		</div>
+		<p>
+		<div>On/Off Actuator 1 </div>
+		<p>
+		<div class="onoffswitch">
+    		<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch1" onchange="toggleCheckbox(this,1)" checked>
+    		<label class="onoffswitch-label" for="myonoffswitch1"></label>
+		</div>
+		
+		<p>	
+		<div>On/Off Actuator 2 </div>
+		<p>
+		<div class="onoffswitch">
+    		<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch2" onchange="toggleCheckbox(this,2)" checked>
+    		<label class="onoffswitch-label" for="myonoffswitch2"></label>
+		</div>
+		
+		<p>
+  </div>
+  <div id="tab3" class="tab">
+
+		
+	<p>
+		<div id="labelsketch3"></div>
+		<p>
+		<button type="button" id="edit3">Edit Sketch</button>
+		<button type="button" id="build3">Build Sketch</button>
+		<button type="button" id="upload3">Upload Sketch</button>
+		<p>
+		
+
+            	
+		<p>
+		<div>Gyro + Accelerometer</div>
+		<p>
+		<div>
+		<table border="1"><tr><td>
+		<table border="1">
+		
+		<tr><td><canvas style="border:1px solid #000000;" id="myCanvas" width="1250" height="220"></canvas></td></tr>
+		
+		<tr><td><canvas style="border:1px solid #000000;" id="myCanvas1" width="1250" height="220"></canvas></td></tr>
+		</table>
+		</td>
+		<td><canvas style="border:1px solid #000000;" id="myCanvas2" width="200" height="520"></canvas></td>
+		</tr>
+		</table>
+		</div>
+		
+
+  </div>
+
+	  <div id="tab4" class="tab">
+
+		
+	<p>
+		<div id="labelsketch4"></div>
+		<p>
+		<button type="button" id="edit4">Edit Sketch</button>
+		<button type="button" id="build4">Build Sketch</button>
+		<button type="button" id="upload4">Upload Sketch</button>
+		<p>
+		
+
+            	
+		<p>
+		<div>Compass</div>
+		<p>
+		<div>
+		<table border="1"><tr><td>
+		   		<canvas style="border:1px solid #000000;" id="myCanvasc" width="520" height="520"></canvas>
+		</td>
+
+		</tr>
+		</table>
+		</div>
+		
+
+  </div>
+
+ </div>
+</div>
+</td></tr>
+</table>
+
+  </body>
+
+<script>
+
+	var canvas = document.getElementById('myCanvas');
+      	var context = canvas.getContext('2d');
+	var canvas1 = document.getElementById('myCanvas1');
+     	var context1 = canvas1.getContext('2d');
+
+	var canvas2 = document.getElementById('myCanvas2');
+      	var context2 = canvas2.getContext('2d');
+	
+	 var canvasc = document.getElementById('myCanvasc');
+      	var contextc = canvasc.getContext('2d');
+	
+  	var angledegc = 10;
+	var xc = 260;
+      	var yc = 260;
+	var zc = 80;
+	var widthc = 520;
+	var heightc = 520;
+	
+  	var angledeg2 = 10;
+	var x2 = -1100;
+      	var y2 = 260;
+	var z2 = 80;
+	var width2 = 1250;
+	var height2 = 520;
+	
+  	var angledeg = 10;
+	var x = 620;
+      	var y = 1450;
+	var z = 0;
+	var width = 1250;
+	var height = 220;
+	
+	var angledeg1 = 10;
+	var x1 = 620;
+      	var y1 = 1450;
+	var z1 = 0;
+	var width1 = 1250;
+	var height1 = 220;
+	
+	
+        //drawmarcas(x,y);
+	setInterval(loopangle, 100);
+	setInterval(loopangle1, 100);
+	setInterval(loopangle2, 100);
+	setInterval(loopanglec, 100);
+	//setanglearrow(a,x,y);
+	//loopangle();
+	//drawarrow();
+
+
+</script>
+</html>

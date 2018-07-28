@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<script src="math.js" type="text/javascript"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+         <script src="//cdn.jsdelivr.net/p5.js/0.3.8/p5.min.js"></script>
+ <script type="text/javascript" src="//cdn.jsdelivr.net/p5.js/0.3.8/addons/p5.dom.js"></script>
+   <script src="compass.js"></script>
+
+        <link rel="stylesheet" href="progress/css/lib/control/progressbar.css" />
+        <script type="text/javascript" src="progress/lib/control/progressbar.min.js"></script>
+
+    <script type="text/javascript" src="smoothie.js"></script>
+    <script type="text/javascript">
+
+//Variables
+
+var bar, slider;
+var valormaximoG=-100000;
+var valorminimoG=100000;
+var valormaximoH=-100000;
+var valorminimoH=100000;
+var valormaximoX=-100000;
+var valorminimoX=100000;
+var valormaximoY=-100000;
+var valorminimoY=100000;
+var valormaximoZ=-100000;
+var valorminimoZ=100000;
+
+var valormaximo1=-100000;
+var valorminimo1=100000;
+var valormaximo2=-100000;
+var valorminimo2=100000;
+var valormaximo3=-100000;
+var valorminimo3=100000;
+var valormaximo4=-100000;
+var valorminimo4=100000;
+var valor1temp;
+var valor2temp;
+var valor3temp;
+var valor4temp;
+
+var valueslider1;
+var multi = 1000;
+var desfase = 500;
+
+ var pitch = new TimeSeries();
+var xq = new TimeSeries();
+var yq = new TimeSeries();
+var zq = new TimeSeries();
+
+
+//recupera informacion del servicio node checkvariable.js
+	var socket = io();
+	
+      socket.on('arduinopc', function(msg){
+      
+		showData(msg);
+
+		
+      });
+
+
+
+function showData(result) {
+
+//sresult = JSON.stringify(result);
+
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+
+//Datos aceleración
+case "P:":
+valorG = sresult.substr(2, largo-2);
+variableG = analog.substr(0, 1);
+valorGtemp = valorG;
+valormaximoG = Math.max(valorGtemp, valormaximoG);
+valorGtemp = valorG;
+valorminimoG = Math.min(valorGtemp, valorminimoG);
+valorGG = (valorG - valorminimoG) * (100 - 0) / (valormaximoG - valorminimoG) + 0;
+valorGG = valorGG.toFixed(2);
+document.getElementById("valorG").innerHTML = valorG;
+document.getElementById("valormaximoG").innerHTML = valormaximoG;
+document.getElementById("valorminimoG").innerHTML = valorminimoG;
+
+setInterval(function() {
+pitch.append(new Date().getTime(), valorZ);
+}, 500);
+
+break;
+
+case "Z:":
+valorZ = sresult.substr(2, largo-2);
+variableZ = analog.substr(0, 1);
+valorZtemp = valorZ;
+valormaximoZ = Math.max(valorZtemp, valormaximoZ);
+valorZtemp = valorZ;
+valorminimoZ = Math.min(valorZtemp, valorminimoZ);
+valorZZ = (valorZ - valorminimoZ) * (100 - 0) / (valormaximoZ - valorminimoZ) + 0;
+valorZZ = valorZZ.toFixed(2);
+document.getElementById("valorZ").innerHTML = valorZ;
+document.getElementById("valormaximoZ").innerHTML = valormaximoZ;
+document.getElementById("valorminimoZ").innerHTML = valorminimoZ;
+
+setInterval(function() {
+zq.append(new Date().getTime(), valorZ);
+}, 500);
+
+break;
+
+case "X:":
+valorX = sresult.substr(2, largo-2);
+variableX = analog.substr(0, 1);
+valorXtemp = valorX;
+valormaximoX = Math.max(valorXtemp, valormaximoX);
+valorXtemp = valorX;
+valorminimoX = Math.min(valorXtemp, valorminimoX);
+valorXX = (valorX - valorminimoX) * (100 - 0) / (valormaximoX - valorminimoX) + 0;
+valorXX = valorXX.toFixed(2);
+document.getElementById("valorX").innerHTML = valorX;
+document.getElementById("valormaximoX").innerHTML = valormaximoX;
+document.getElementById("valorminimoX").innerHTML = valorminimoX;
+
+setInterval(function() {
+xq.append(new Date().getTime(), valorX);
+}, 500);
+
+break;
+
+case "Y:":
+valorY = sresult.substr(2, largo-2);
+variableY = analog.substr(0, 1);
+valorYtemp = valorY;
+valormaximoY = Math.max(valorYtemp, valormaximoY);
+valorYtemp = valorY;
+valorminimoY = Math.min(valorYtemp, valorminimoY);
+valorYY = (valorY - valorminimoY) * (100 - 0) / (valormaximoY - valorminimoY) + 0;
+valorYY = valorYY.toFixed(2);
+document.getElementById("valorY").innerHTML = valorY;
+document.getElementById("valormaximoY").innerHTML = valormaximoY;
+document.getElementById("valorminimoY").innerHTML = valorminimoY;
+
+setInterval(function() {
+yq.append(new Date().getTime(), valorY);
+}, 500);
+
+break;
+
+
+  
+}
+}
+
+
+
+      // Randomly add a data point every 500ms
+      var random = new TimeSeries();
+      setInterval(function() {
+        random.append(new Date().getTime(), Math.random() * 10000);
+      }, 500);
+      
+      function createTimeline() {
+        var chart1 = new SmoothieChart({maxValue:3,minValue:-3});
+        //chart1.addTimeSeries(pitch, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
+	chart1.addTimeSeries(xq, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 }); //linea verde
+	chart1.addTimeSeries(yq, { strokeStyle: 'rgba(0, 1, 255, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 }); // linea azul
+	chart1.addTimeSeries(zq, { strokeStyle: 'rgba(255, 1, 1, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 }); // linea roja
+        chart1.streamTo(document.getElementById("chart1"), 500);
+	}
+
+
+  
+    </script>
+  </head>
+  <body onload="createTimeline()">
+
+    <p>The <em>hello world</em> of <a href="../">Smoothie Charts</a>. View source.</p>
+
+    	<canvas id="chart1" width="1800" height="500"></canvas>
+
+<p>Valor
+<div id="valorG"></div>
+<p>Máximo
+<div id="valormaximoG"></div>
+<p>
+<p>Mínimo
+<div id="valorminimoG"></div>
+<p>
+
+<p>Valor
+<div id="valorX"></div>
+<p>Máximo
+<div id="valormaximoX"></div>
+<p>
+<p>Mínimo
+<div id="valorminimoX"></div>
+<p>
+
+<p>Valor
+<div id="valorY"></div>
+<p>Máximo
+<div id="valormaximoY"></div>
+<p>
+<p>Mínimo
+<div id="valorminimoY"></div>
+<p>
+
+<p>Valor
+<div id="valorZ"></div>
+<p>Máximo
+<div id="valormaximoZ"></div>
+<p>
+<p>Mínimo
+<div id="valorminimoZ"></div>
+<p>
+
+  </body>
+</html>

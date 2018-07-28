@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+ <head>
+	<title>holaquetal</title>
+  <meta charset="utf-8"/>
+	<script src="math.js" type="text/javascript"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <script type="application/javascript">
+
+var datamsg = 0;
+
+
+
+var socket = io();
+
+//recupera informacion del servicio node checkvariable.js
+
+
+
+ctx = null;
+
+
+function init()
+{
+	// Grab the compass element
+	var canvas = document.getElementById('canvas');
+	
+	// Canvas supported?
+	if(canvas.getContext('2d'))
+	{
+		ctx = canvas.getContext('2d');
+		//draw(10.5);
+
+	}
+  	else
+  	{
+  		alert("Canvas not supported!");
+  	}
+
+	
+  	
+}
+
+socket.on('arduinopc', function(msg){
+      
+largo = msg.length;
+pre = msg.substr(0,2);
+
+msg = msg.substr(3, largo-3);
+msg = parseFloat(msg);
+
+datamsg = msg;
+		
+});
+
+setInterval(function() {
+draw(datamsg);
+}, 20);
+
+function draw(angl) {
+
+	clearCanvas();
+
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 950, (Math.PI/180)*255, (Math.PI/180)*285, false);
+	ctx.stroke();
+
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*269, (Math.PI/180)*270, false);
+	ctx.stroke();
+	
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*268, (Math.PI/180)*269, false);
+	ctx.stroke();
+	
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*267, (Math.PI/180)*268, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*266, (Math.PI/180)*267, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*265, (Math.PI/180)*266, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*264, (Math.PI/180)*265, false);
+	ctx.stroke();
+	
+ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*263, (Math.PI/180)*264, false);
+	ctx.stroke();
+	
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*262, (Math.PI/180)*263, false);
+	ctx.stroke();
+	
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*261, (Math.PI/180)*262, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*260, (Math.PI/180)*261, false);
+	ctx.stroke();
+
+
+
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*270, (Math.PI/180)*271, false);
+	ctx.stroke();
+	
+	ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*271, (Math.PI/180)*272, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*272, (Math.PI/180)*273, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*273, (Math.PI/180)*274, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*274, (Math.PI/180)*275, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*275, (Math.PI/180)*276, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*276, (Math.PI/180)*277, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*277, (Math.PI/180)*278, false);
+	ctx.stroke();
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 948, (Math.PI/180)*278, (Math.PI/180)*279, false);
+	ctx.stroke();
+
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 952, (Math.PI/180)*279, (Math.PI/180)*280, false);
+	ctx.stroke();
+
+
+ctx.beginPath();
+	 ctx.arc(400, 1000, 10, (Math.PI/180)*0, (Math.PI/180)*360, false);
+	ctx.fill();
+
+ctx.beginPath();
+ctx.moveTo(400,40);
+ctx.lineTo(400,60);
+ctx.stroke();
+	
+
+
+
+ctx.save();
+
+ctx.translate(400, 1000);
+
+ctx.rotate((Math.PI/180)*angl);
+
+ctx.fillRect(-1,-1000,2,2000);
+	
+
+ctx.restore();
+
+
+
+document.getElementById("angulo").innerHTML = angl;
+
+ 
+}
+
+function clearCanvas()
+{
+	 // clear canvas
+	ctx.clearRect(0, 0, 800, 200);
+}
+  </script>
+ </head>
+ <body onload="init();">
+   <canvas id="canvas" width="800" height="200"></canvas>
+	<div id="angulo" style="color:#0000FF" align="center">
+  
+  <p></p>
+</div>
+ </body>
+</html>

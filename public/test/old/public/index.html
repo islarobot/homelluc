@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Index</title>
+    
+  </head>
+  <body>
+
+<table style="width:100%" border="1">
+ <col width="25%"> 
+<col width="25%">
+  <col width="25%">
+<col width="25%">
+
+
+
+
+<tr>
+<td>1</td>
+</tr>
+
+<tr>
+
+<td>Conexión Puerto Serie:
+
+</td>
+<td>
+<div id="divconnect"></div>
+</td>
+<td>4
+<div id="varaG"></div>
+</td>
+<td>5
+<div id="textG"></div>
+</td>
+<td>6
+<div id="my-progressbarG"></div>
+</td>
+<td>7
+
+</td>
+</tr>
+
+<tr>
+<td>8</td>
+</tr>
+
+<tr>
+
+<td>
+
+</td>
+<td>
+<div id="varH"></div>
+</td>
+<td>
+<div id="varaH"></div>
+</td>
+<td>
+<div id="textH"></div>
+</td>
+<td>
+<div id="my-progressbarH"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+
+
+
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var1"></div>
+</td>
+<td>
+<div id="vara1"></div>
+</td>
+<td>
+<div id="text1"></div>
+</td>
+<td>
+<div id="my-progressbar1"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var2"></div>
+</td>
+<td>
+<div id="vara2"></div>
+</td>
+<td>
+<div id="text2"></div>
+</td>
+<td>
+<div id="my-progressbar2"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var3"></div>
+</td>
+<td>
+<div id="vara3"></div>
+</td>
+<td>
+<div id="text3"></div>
+</td>
+<td>
+<div id="my-progressbar3"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var4"></div>
+</td>
+<td>
+<div id="vara4"></div>
+</td>
+<td>
+<div id="text4"></div>
+</td>
+<td>
+<div id="my-progressbar4"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var5"></div>
+</td>
+<td>
+<div id="vara5"></div>
+</td>
+<td>
+<div id="text4"></div>
+</td>
+<td>
+
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+
+
+	<script src="math.js" type="text/javascript"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+         <script src="//cdn.jsdelivr.net/p5.js/0.3.8/p5.min.js"></script>
+ <script type="text/javascript" src="//cdn.jsdelivr.net/p5.js/0.3.8/addons/p5.dom.js"></script>
+   <script src="compass.js"></script>
+
+        <link rel="stylesheet" href="progress/css/lib/control/progressbar.css" />
+        <script type="text/javascript" src="progress/lib/control/progressbar.min.js"></script>
+
+
+    <script>
+
+var socket = io.connect('http://localhost:3000');
+
+function sendcommand(command){
+
+socket.on('connect', function(data) {
+socket.emit('senddata', command);
+});
+
+}
+
+
+socket.on('getdata', function(data) {
+        
+if(data == 'OK'){
+alert(data);
+document.getElementById("divconnect").innerHTML = 'Conexión Realizada';
+}else
+{
+alert(data);
+document.getElementById("divconnect").innerHTML = 'Ninguna conexión';
+}
+});
+
+</script>
+
+<body>
+
+<a href="javascript:sendcommand('conectar');">link text</a>
+
+</body>
+</html>

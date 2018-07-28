@@ -1,0 +1,90 @@
+
+.classInputProgress {
+  height: 39px;
+  -webkit-appearance: none;
+  margin: 10px 0;
+  width: 100%;
+}
+.classInputProgress:focus {
+  outline: none;
+}
+.classInputProgress::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 10px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #E3E3E3;
+  border-radius: 37px;
+  border: 1px solid #000000;
+}
+.classInputProgress::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #000000;
+  height: 32px;
+  width: 12px;
+  border-radius: 5px;
+  background: #D1D1D1;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -12px;
+}
+.classInputProgress:focus::-webkit-slider-runnable-track {
+  background: #E3E3E3;
+}
+.classInputProgress::-moz-range-track {
+  width: 100%;
+  height: 10px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #E3E3E3;
+  border-radius: 37px;
+  border: 1px solid #000000;
+}
+.classInputProgress::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #000000;
+  height: 32px;
+  width: 12px;
+  border-radius: 5px;
+  background: #D1D1D1;
+  cursor: pointer;
+}
+.classInputProgress::-ms-track {
+  width: 100%;
+  height: 10px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.classInputProgress::-ms-fill-lower {
+  background: #E3E3E3;
+  border: 1px solid #000000;
+  border-radius: 74px;
+  box-shadow: 0px 0px 0px #000000;
+}
+.classInputProgress::-ms-fill-upper {
+  background: #E3E3E3;
+  border: 1px solid #000000;
+  border-radius: 74px;
+  box-shadow: 0px 0px 0px #000000;
+}
+.classInputProgress::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #000000;
+  height: 32px;
+  width: 12px;
+  border-radius: 5px;
+  background: #D1D1D1;
+  cursor: pointer;
+}
+.classInputProgress:focus::-ms-fill-lower {
+  background: #E3E3E3;
+}
+.classInputProgress:focus::-ms-fill-upper {
+  background: #E3E3E3;
+}

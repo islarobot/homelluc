@@ -1,0 +1,13 @@
+var config = {};
+
+
+config.repository = 'islarobot';
+
+config.jsonurl = 'https://raw.githubusercontent.com/islarobot/arduino-projects/master/';
+
+config.src_ino_file = 'projects/source/master.ino';
+config.src_ino_file2 = 'master.ino';
+config.source_ino_path = 'projects/source/ino';
+
+
+module.exports = config;

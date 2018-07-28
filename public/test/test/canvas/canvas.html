@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+     
+    </style>
+  </head>
+  <body>
+	<table border="1"><tr><td align="center">
+	<label id="pepe"></label></td></tr><tr><td>
+    <canvas style="border:1px solid #000000;" id="myCanvas" width="1250" height="350"></canvas>
+	</td></tr>
+	<tr><td align="center">
+	<label id="pepe1"></label></td></tr><tr><td>
+    <canvas style="border:1px solid #000000;" id="myCanvas1" width="1250" height="350"></canvas>
+	</td></tr>
+	</table>
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+	var canvas1 = document.getElementById('myCanvas1');
+     	var context1 = canvas1.getContext('2d');
+  	var angledeg = 10;
+	var x = 620;
+      	var y = 1500;
+	var z = 0;
+	var width = 1250;
+	var height = 350;
+	
+	var angledeg1 = 10;
+	var x1 = 620;
+      	var y1 = 1500;
+	var z1 = 0;
+	var width1 = 1250;
+	var height1 = 350;
+	
+	
+        //drawmarcas(x,y);
+	setInterval(loopangle, 100);
+	setInterval(loopangle1, 100);
+	//setanglearrow(a,x,y);
+	//loopangle();
+	//drawarrow();
+
+
+	
+
+      
+	      // line color
+      
+
+	function loopangle(){
+	var angleradz = (z + 180) * ( Math.PI / 180 );
+	context.clearRect(0, 0, width, height);
+	drawmarcas(x,y);	
+	context.save();
+		
+	context.translate(x, y);
+	context.rotate(angleradz);
+	
+	drawarrow();
+	z++;
+	context.restore();	
+	//clearCanvas();	
+	if(z == 25){z = -25;}
+	context.strokeStyle = 'black';
+	  document.getElementById('pepe').innerHTML = 'Value: ' + z;
+	context.stroke();
+	}
+	
+
+
+	
+		
+	function loopangle1(){
+	var angleradz = (z1 + 180) * ( Math.PI / 180 );
+	context1.clearRect(0, 0, width1, height1);
+	drawmarcas1(x1,y1);	
+	context1.save();
+		
+	context1.translate(x1, y1);
+	context1.rotate(angleradz);
+	
+	drawarrow1();
+	z1--;
+	context1.restore();	
+	//clearCanvas();	
+	if(z1 == -25){z1 = 25;}
+	context1.strokeStyle = 'black';
+	  document.getElementById('pepe1').innerHTML = 'Value: ' + z1;
+	context1.stroke();
+	}
+	
+	function drawarrow(){
+	
+	context.moveTo(0, 0);
+        context.lineTo(0, 1395);
+	context.lineTo(5, 1385);
+	context.moveTo(0, 1395);
+	context.lineTo(-5, 1385);
+
+	
+     	
+	}
+	
+	function drawarrow1(){
+	
+	context1.moveTo(0, 0);
+        context1.lineTo(0, 1395);
+	context1.lineTo(5, 1385);
+	context1.moveTo(0, 1395);
+	context1.lineTo(-5, 1385);
+
+	
+     	
+	}
+	
+	
+
+	function drawmarcas(x,y){
+
+	var a;
+	var b;
+      	var a1;
+      	var b1;
+      	var a2;
+      	var b2;
+	
+      	var c1 = 1410;
+      	var alfarad;
+      	var alfadeg;
+      	var deltax = 13;
+
+      
+      var radius = 1400;
+      var startAngleDeg = 245;
+      var endAngleDeg = 295;
+      var startAngle = startAngleDeg * ( Math.PI / 180 );
+      var endAngle = endAngleDeg * ( Math.PI / 180 );
+      //var startAngle = 1.4 * ( Math.PI / 1 );
+      //var endAngle = 1.6 * ( Math.PI / 1 );
+      var counterClockwise = false;
+      var largopata = 10;
+      var largotexto = 10;
+      
+      
+
+      context.beginPath();
+      context.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+      context.lineWidth = 2;
+       
+      //context.beginPath();
+     // context.moveTo(600, 100);
+     // context.lineTo(600, 90);
+      
+      //indicadores con ángulo:
+      // x = radio * senalfa
+      // y = radio * cos alfa
+
+      // primero de grado en grado
+
+       //radians = degrees * (pi/180)
+
+       //https://goo.gl/CJ7TXY
+
+
+        context.font = "10px Arial";
+
+
+	for(alfadeg = 115;alfadeg>90;alfadeg--){
+      // alfadeg = 80;
+       alfarad = alfadeg * (Math.PI/180);
+
+        b = y - Math.abs(radius * Math.sin(alfarad));
+	a = x - Math.abs(radius * Math.cos(alfarad));
+        b1 = b - Math.abs(largopata * Math.sin(alfarad));
+        a1 = a - Math.abs(largopata * Math.cos(alfarad));
+	b2 = b - Math.abs(largotexto * Math.sin(alfarad));
+        a2 = a + Math.abs(largotexto * Math.cos(alfarad));
+     
+      context.moveTo(a, b);
+      context.lineTo(a1, b1);
+      context.fillText(-alfadeg+90,a2-deltax,b2-2);
+	}
+
+	for(alfadeg = 90;alfadeg<116;alfadeg++){
+      
+       alfarad = alfadeg * (Math.PI/180);
+
+        b = y - Math.abs(radius * Math.sin(alfarad));
+	a = x + Math.abs(radius * Math.cos(alfarad));
+        b1 = b - Math.abs(largopata * Math.sin(alfarad));
+        a1 = a + Math.abs(largopata * Math.cos(alfarad));
+	b2 = b - Math.abs(largotexto * Math.sin(alfarad));
+        a2 = a + Math.abs(largotexto * Math.cos(alfarad));
+     
+      context.moveTo(a, b);
+      context.lineTo(a1, b1);
+	
+	context.fillText(alfadeg-90,a2,b2-2);
+      
+	}
+	
+	//context.strokeStyle = 'black';
+     	//context.stroke();
+	}
+
+	function drawmarcas1(x,y){
+
+	var a;
+	var b;
+      	var a1;
+      	var b1;
+      	var a2;
+      	var b2;
+	
+      	var c1 = 1410;
+      	var alfarad;
+      	var alfadeg;
+      	var deltax = 13;
+
+      
+      var radius = 1400;
+      var startAngleDeg = 245;
+      var endAngleDeg = 295;
+      var startAngle = startAngleDeg * ( Math.PI / 180 );
+      var endAngle = endAngleDeg * ( Math.PI / 180 );
+      //var startAngle = 1.4 * ( Math.PI / 1 );
+      //var endAngle = 1.6 * ( Math.PI / 1 );
+      var counterClockwise = false;
+      var largopata = 10;
+      var largotexto = 10;
+      
+      
+
+      context1.beginPath();
+      context1.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+      context1.lineWidth = 2;
+       
+      //context.beginPath();
+     // context.moveTo(600, 100);
+     // context.lineTo(600, 90);
+      
+      //indicadores con ángulo:
+      // x = radio * senalfa
+      // y = radio * cos alfa
+
+      // primero de grado en grado
+
+       //radians = degrees * (pi/180)
+
+       //https://goo.gl/CJ7TXY
+
+
+        context1.font = "10px Arial";
+
+
+	for(alfadeg = 115;alfadeg>90;alfadeg--){
+      // alfadeg = 80;
+       alfarad = alfadeg * (Math.PI/180);
+
+        b = y - Math.abs(radius * Math.sin(alfarad));
+	a = x - Math.abs(radius * Math.cos(alfarad));
+        b1 = b - Math.abs(largopata * Math.sin(alfarad));
+        a1 = a - Math.abs(largopata * Math.cos(alfarad));
+	b2 = b - Math.abs(largotexto * Math.sin(alfarad));
+        a2 = a + Math.abs(largotexto * Math.cos(alfarad));
+     
+      context1.moveTo(a, b);
+      context1.lineTo(a1, b1);
+      context1.fillText(-alfadeg+90,a2-deltax,b2-2);
+	}
+
+	for(alfadeg = 90;alfadeg<116;alfadeg++){
+      
+       alfarad = alfadeg * (Math.PI/180);
+
+        b = y - Math.abs(radius * Math.sin(alfarad));
+	a = x + Math.abs(radius * Math.cos(alfarad));
+        b1 = b - Math.abs(largopata * Math.sin(alfarad));
+        a1 = a + Math.abs(largopata * Math.cos(alfarad));
+	b2 = b - Math.abs(largotexto * Math.sin(alfarad));
+        a2 = a + Math.abs(largotexto * Math.cos(alfarad));
+     
+      context1.moveTo(a, b);
+      context1.lineTo(a1, b1);
+	
+	context1.fillText(alfadeg-90,a2,b2-2);
+      
+	}
+	
+	//context.strokeStyle = 'black';
+     	//context.stroke();
+	}
+
+
+
+    </script>
+  </body>
+</html>      

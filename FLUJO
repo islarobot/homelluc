@@ -1,0 +1,35 @@
+1. Main abre comms, usb_list y web_server
+2. Web_server abre Firefox despues de x segundos
+3. Firefox solicita puertos a web_server
+4. WebServer solicita a Main (6)
+5. Main comprueba si usb_list está abierto.
+	6. Si está abierto responde a web ok (6)
+	7. Web solicita a usb_list (2)
+	8. Usb devuelve lista a main (1)
+	9. Main comprueba el número de campos. 
+		10. Si solo hay 1, main establece el puerto en la variable puerto y lanza ardu_comms
+		11. Ardu_comms le dice a main que está abierto (4)
+		12. Main le responde con el puerto (5)
+		13. Main cierra el usb_list (0)
+		14. Ardu abre el puerto.
+		15. Ardu confirma a main apertura de puerto (20)
+		16. Ardu confirma a web apertura de puerto (20)
+	
+
+
+
+Botón request usb list
+
+1. Cliente web solicita lista (request_usb)
+2. c3_web solicita a c1_main (6)
+3
+
+
+
+Desenchufo Arduino
+
+1. le digo a web que desenchufo (20,0) para que informe (state)
+2. le digo a main que desenchufo (20,0) para actualizar estado
+3. le digo a main que desenchufo (11) para que cierre ardu y abra usb.
+4. main abre usb.
+4. main le dice a ardu que cierre.

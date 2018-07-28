@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<form>
+  Title:<br>
+  <input type="text" name="title"><br>
+  
+    Name:<br>
+  <input type="text" name="name"><br>
+  
+  
+    Section:<br>
+  <input type="text" name="section"><br>
+  Route:<br>
+  <p>
+  <input type="text" name="route">
+  
+  Code:<br>
+  <p>
+  <input type="text" name="code">
+
+  
+</form>
+
+
+
+</body>
+</html>

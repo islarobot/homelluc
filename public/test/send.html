@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Check Variables Arduino</title>
+    
+  </head>
+  <body onload='init()'>
+
+<div>ESTADO</div>
+<p>
+<div id="E"></div>
+<p>
+
+<div>DATOS</div>
+<p>
+<div id="X"></div>
+<p>
+<div id="Y"></div>
+<p>
+<form>
+             
+            <input type="text" id="message" /> <!--text form to send data to the server-->
+            <input id="submit" type="button" value="Send data to Server">
+            <div id="content"></div> <!--This is where the data from the server is added-->
+ 
+        </form>
+
+
+	<script src="math.js" type="text/javascript"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+         <script src="//cdn.jsdelivr.net/p5.js/0.3.8/p5.min.js"></script>
+ <script type="text/javascript" src="//cdn.jsdelivr.net/p5.js/0.3.8/addons/p5.dom.js"></script>
+   <script src="compass.js"></script>
+
+        <link rel="stylesheet" href="progress/css/lib/control/progressbar.css" />
+        <script type="text/javascript" src="progress/lib/control/progressbar.min.js"></script>
+
+
+    <script>
+
+
+
+	var socket = io();
+	//recupera informacion del servicio node checkvariable.js
+      socket.on('valoresarduino', function(msg){
+      
+		showData(msg);
+
+		
+      });
+   
+
+     socket.on('estadosconexion', function(msg){
+      
+		showState(msg);
+
+		
+      });
+
+
+            $(function(){
+                $('#submit').click(function(){ /*listening to the button click using Jquery listener*/
+                    var data = { /*creating a Js ojbect to be sent to the server*/ 
+                        message:$('#message').val(), /*getting the text input data      */
+                        author:'karthic'                
+                    }
+			var data1 = $('#message').val();
+                    //socket.send(JSON.stringify(data));
+		 	socket.send(data1);
+                    /*Data can be sent to server very easily by using socket.send() method 
+                    The data has to be changed to a JSON before sending
+                                          it (JSON.stringify() does this job )*/
+                    /* This triggers a message event on the server side 
+                    and the event handler obtains the data sent */ 
+ 
+                    $('#message').val('');
+                    //Emptying the text box value using jquery 
+ 
+                });
+            });
+
+
+function init(){
+
+document.getElementById("E").innerHTML = "Desconectado";
+
+}
+
+
+function showState(result) {
+
+//alert(result);
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+case "C":
+document.getElementById("E").innerHTML = "Conectado";
+break;
+case "D":
+document.getElementById("E").innerHTML = "Desconectado";
+break;
+
+}
+
+}
+
+function showData(result) {
+
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+case "X:":
+document.getElementById("X").innerHTML = result;
+break;
+case "Y:":
+document.getElementById("Y").innerHTML = result;
+break;
+
+}
+}
+
+
+
+</script>
+
+
+  </body>
+</html>

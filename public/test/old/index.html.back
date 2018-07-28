@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Arduino Tool</title>
+    
+	<style>
+
+	/*----- Tabs -----*/
+	.tabs {
+    width:100%;
+    display:inline-block;
+}
+ 
+    /*----- Tab Links -----*/
+    /* Clearfix */
+    .tab-links:after {
+        display:block;
+        clear:both;
+        content:'';
+    }
+ 
+    .tab-links li {
+        margin:0px 5px;
+        float:left;
+        list-style:none;
+    }
+ 
+        .tab-links a {
+            padding:9px 15px;
+            display:inline-block;
+            border-radius:3px 3px 0px 0px;
+            background:#7FB5DA;
+            font-size:16px;
+            font-weight:600;
+            color:#4c4c4c;
+            transition:all linear 0.15s;
+        }
+ 
+        .tab-links a:hover {
+            background:#a7cce5;
+            text-decoration:none;
+        }
+ 
+    li.active a, li.active a:hover {
+        background:#fff;
+        color:#4c4c4c;
+    }
+ 
+    /*----- Content of Tabs -----*/
+    .tab-content {
+        padding:15px;
+        border-radius:3px;
+        box-shadow:-1px 1px 1px rgba(0,0,0,0.15);
+        background:#fff;
+    }
+ 
+        .tab {
+            display:none;
+        }
+ 
+        .tab.active {
+            display:block;
+        }
+
+	</style>
+	
+    	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+
+
+
+
+
+
+	jQuery(document).ready(function() {
+
+	 $("#cmn-toggle-1").on("click", function() {
+    		//alert(document.getElementById('cmn-toggle-1').checked);
+
+	var enviar = document.getElementById('cmn-toggle-1').checked;
+	senddata("M",enviar);
+	purplelight();
+  	});
+
+	 $("#slider1").on("change", function() {
+    		//alert(document.getElementById('cmn-toggle-1').checked);
+
+	var enviar = document.getElementById('slider1').value;
+	senddata("N",enviar);
+	purplelight();
+  	});
+
+    	jQuery('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+ 
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+ 
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+ 
+        e.preventDefault();
+	});
+	});
+
+
+
+
+	var socket = io();
+	//recupera informacion del servicio node checkvariable.js
+      socket.on('valoresarduino', function(msg){
+      
+		showData(msg);
+		bluelight();
+
+		
+      });
+   
+
+     socket.on('estadosconexion', function(msg){
+      
+		showState(msg);
+
+		
+      });
+
+
+            $(function(){
+                $('#submit').click(function(){ /*listening to the button click using Jquery listener*/
+                    var data = { /*creating a Js ojbect to be sent to the server*/ 
+                        message:$('#message').val(), /*getting the text input data      */
+                        author:'karthic'                
+                    }
+			var data1 = $('#message').val();
+                    //socket.send(JSON.stringify(data));
+		 	socket.send(data1);
+                    /*Data can be sent to server very easily by using socket.send() method 
+                    The data has to be changed to a JSON before sending
+                                          it (JSON.stringify() does this job )*/
+                    /* This triggers a message event on the server side 
+                    and the event handler obtains the data sent */ 
+ 
+                    $('#message').val('');
+                    //Emptying the text box value using jquery 
+ 
+                });
+            });
+
+
+function init(){
+
+//document.getElementById("E").innerHTML = "Desconectado";
+
+}
+
+
+function showState(result) {
+
+//alert(result);
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+case "C":
+//document.getElementById("E").innerHTML = "Connected";
+document.getElementById("conect").src="Circle_Green.png";
+break;
+case "D":
+//document.getElementById("E").innerHTML = "Disconnected";
+document.getElementById("conect").src="Circle_Red.png";
+break;
+
+}
+
+}
+
+function showData(result) {
+
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+case "X:":
+document.getElementById("X").innerHTML = result;
+break;
+case "Y:":
+document.getElementById("Y").innerHTML = result;
+break;
+
+}
+}
+
+function bluelight(){
+
+document.getElementById("datain").src="Circle_Blue.png";
+//document.getElementById("datain").src="Circle_Grey.png";
+setTimeout(function(){document.getElementById("datain").src="Circle_Grey.png";}, 30);
+
+}
+
+
+function purplelight(){
+
+document.getElementById("dataout").src="Circle_Purple.png";
+//document.getElementById("datain").src="Circle_Grey.png";
+setTimeout(function(){document.getElementById("dataout").src="Circle_Grey.png";}, 50);
+//alert('hola');
+}
+
+
+function senddata(letra,valor){
+
+switch (letra){
+case "M":
+var cosa;
+if(valor == true){cosa = 1;}else{cosa = 0;}
+var stringenvio = 'M:'+ cosa;
+
+socket.send(stringenvio);
+
+break;
+
+case "N":
+
+
+var stringenvio = 'N:'+ valor;
+
+socket.send(stringenvio);
+
+break;
+
+case "U":
+var stringenvio = 'U:'+ valor;
+socket.send(stringenvio);
+break;
+
+}
+
+
+}
+
+
+
+$(document).ready(function() {
+    $("#upload1").click(function(){
+       senddata('U',1);
+    }); 
+
+	   $("#upload2").click(function(){
+       senddata('U',2);
+    }); 
+});
+	</script>
+
+  <!-- css -->
+
+ 
+   <link href="css/style.css" rel="stylesheet">
+
+  </head>
+  <body onload='init()'>
+
+<table width=100% border=1>
+<tr><td>
+<table width=20% border=0>
+
+<tr><td>Arduino State</td><td><img src="Circle_Red.png" id="conect" height="20" width="20"></td></tr>
+<tr><td>Data in</td><td> <img src="Circle_Grey.png" id="datain" height="20" width="20"> </td></tr>
+<tr><td>Data out</td><td>  <img src="Circle_Grey.png" id="dataout" height="20" width="20"> </td></tr>
+</table>
+
+
+</td></tr>
+
+<tr><td>
+
+
+<div class="tabs">
+    <ul class="tab-links">
+        <li class="active"><a href="#tab1">Basic Sensors</a></li>
+        <li><a href="#tab2">Basic Actuators</a></li>
+        <li><a href="#tab3">Domotics</a></li>
+        <li><a href="#tab4">Remote Control</a></li>
+    </ul>
+ 
+    <div class="tab-content">
+        <div id="tab1" class="tab active">
+		<p>
+		<button type="button" id="upload1">Upload Sketch</button>
+		<p>
+		
+
+            <p>Basic Sensors</p>
+
+		<div>DATOS</div>
+<p>
+<div id="X"></div>
+<p>
+<div id="Y"></div>
+<p>
+
+        </div>
+ 
+        <div id="tab2" class="tab">
+
+		<p>
+		<button type="button" id="upload2">Upload Sketch</button>
+		<p>
+            <p>Basic Actuators</p>
+          <div class="switch">
+            <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round" type="checkbox">
+            <label for="cmn-toggle-1"></label>
+          </div>
+
+	<p>
+	<div >
+	<input class ="pepe" type="range" id="slider1" min="0" max="255">
+	</div>
+          </div>
+
+
+  
+ 
+        <div id="tab3" class="tab">
+            <p>Domotics</p>
+
+        </div>
+ 
+        <div id="tab4" class="tab">
+            <p>Remote Control</p>
+
+        </div>
+    </div>
+</div>
+</td></tr>
+</table>
+
+  </body>
+</html>

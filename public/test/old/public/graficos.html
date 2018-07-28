@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gráfico de Variables Arduino</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+#my-progressbar1{
+	width:800px;
+	height: 50px;
+	border:0px solid black;
+	
+}
+#my-progressbar2{
+	height: 50px;
+	border:0px solid black;
+	
+}
+
+#my-progressbar3{
+	width:800px;
+	height: 50px;
+	border:0px solid black;
+	
+}
+
+#my-progressbar4{
+	width:800px;
+	height: 50px;
+	border:0px solid black;
+	
+}
+    </style>
+  </head>
+  <body onload='init()'>
+
+<table style="width:100%" border="1">
+ <col width="4%"> 
+<col width="3%">
+  <col width="3%">
+<col width="3%">
+
+ <col width="83%">
+<col width="4%"> 
+
+
+<tr>
+<td height="50"></td>
+</tr>
+
+<tr>
+
+<td>
+
+</td>
+<td>
+<div id="varG"></div>
+</td>
+<td>
+<div id="varaG"></div>
+</td>
+<td>
+<div id="textG"></div>
+</td>
+<td>
+<div id="my-progressbarG"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td height="50"></td>
+</tr>
+
+<tr>
+
+<td>
+
+</td>
+<td>
+<div id="varH"></div>
+</td>
+<td>
+<div id="varaH"></div>
+</td>
+<td>
+<div id="textH"></div>
+</td>
+<td>
+<div id="my-progressbarH"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td height="50"></td>
+</tr>
+
+
+
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var1"></div>
+</td>
+<td>
+<div id="vara1"></div>
+</td>
+<td>
+<div id="text1"></div>
+</td>
+<td>
+<div id="my-progressbar1"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var2"></div>
+</td>
+<td>
+<div id="vara2"></div>
+</td>
+<td>
+<div id="text2"></div>
+</td>
+<td>
+<div id="my-progressbar2"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var3"></div>
+</td>
+<td>
+<div id="vara3"></div>
+</td>
+<td>
+<div id="text3"></div>
+</td>
+<td>
+<div id="my-progressbar3"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var4"></div>
+</td>
+<td>
+<div id="vara4"></div>
+</td>
+<td>
+<div id="text4"></div>
+</td>
+<td>
+<div id="my-progressbar4"></div>
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td>
+
+</td>
+<td>
+<div id="var5"></div>
+</td>
+<td>
+<div id="vara5"></div>
+</td>
+<td>
+<div id="text4"></div>
+</td>
+<td>
+
+<canvas id="compass" width="200" height="200"></canvas>
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+
+
+	<script src="math.js" type="text/javascript"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+         <script src="//cdn.jsdelivr.net/p5.js/0.3.8/p5.min.js"></script>
+ <script type="text/javascript" src="//cdn.jsdelivr.net/p5.js/0.3.8/addons/p5.dom.js"></script>
+   <script src="compass.js"></script>
+
+        <link rel="stylesheet" href="progress/css/lib/control/progressbar.css" />
+        <script type="text/javascript" src="progress/lib/control/progressbar.min.js"></script>
+
+
+    <script>
+
+
+
+	var socket = io();
+	//recupera informacion del servicio node checkvariable.js
+      socket.on('arduinopc', function(msg){
+      
+		showData(msg);
+
+		
+      });
+   
+
+var bar, slider;
+var valormaximoG=-100000;
+var valorminimoG=100000;
+var valormaximoH=-100000;
+var valorminimoH=100000;
+
+var valormaximo1=-100000;
+var valorminimo1=100000;
+var valormaximo2=-100000;
+var valorminimo2=100000;
+var valormaximo3=-100000;
+var valorminimo3=100000;
+var valormaximo4=-100000;
+var valorminimo4=100000;
+var valor1temp;
+var valor2temp;
+var valor3temp;
+var valor4temp;
+
+var valueslider1;
+var multi = 1000;
+var desfase = 500;
+
+
+function init(){
+
+	// defino las progressbar
+		progressBarG = new ProgressBar("my-progressbarG", {'width':'100%', 'height':'30px'});
+		progressBarH = new ProgressBar("my-progressbarH", {'width':'100%', 'height':'30px'});
+      		progressBar1 = new ProgressBar("my-progressbar1", {'width':'100%', 'height':'30px'});
+                progressBar2 = new ProgressBar("my-progressbar2", {'width':'100%', 'height':'30px'});
+		progressBar3 = new ProgressBar("my-progressbar3", {'width':'100%', 'height':'30px'});
+                progressBar4 = new ProgressBar("my-progressbar4", {'width':'100%', 'height':'30px'});
+		var canvas = document.getElementById('compass');
+
+		ctx = canvas.getContext('2d');
+		
+		// Load the needle image
+		needle = new Image();
+  		needle.src = 'needle.png';
+
+  		// Load the compass image
+		img = new Image();
+		img.src = 'compass.png';
+ 		//img.onload = imgLoaded;
+
+}
+
+
+
+function inttostringchar(a){
+
+var resultado;
+if (a < 10 ) {resultado = '00'+a;}
+else if (a > 9 && a < 99 ) {resultado = '0'+a;} 
+else {resultado = a;} 
+
+return resultado;
+
+
+}
+
+
+function showData(result) {
+
+//sresult = JSON.stringify(result);
+
+sresult = result;
+
+analog = sresult.substr(0, 2);
+largo = sresult.length;
+
+switch (analog) {
+
+//Datos aceleración
+case "G:":
+valorG = sresult.substr(2, largo-2);
+
+
+variableG = analog.substr(0, 1);
+
+valorGtemp = valorG;
+valormaximoG = Math.max(valorGtemp, valormaximoG);
+
+
+valorGtemp = valorG;
+valorminimoG = Math.min(valorGtemp, valorminimoG);
+
+
+valorGG = (valorG - valorminimoG) * (100 - 0) / (valormaximoG - valorminimoG) + 0;
+
+
+valorGG = valorGG.toFixed(2);
+
+
+document.getElementById("textG").innerHTML = valorG;
+
+document.getElementById("varG").innerHTML = variableG;
+
+progressBarG.setPercent(valorGG);
+
+        break;
+
+
+case "H:":
+valorH = sresult.substr(2, largo-2);
+variableH = analog.substr(0, 1);
+
+
+
+valorHtemp = valorH;
+valormaximoH = Math.max(valorHtemp, valormaximoH);
+
+valorHtemp = valorH;
+valorminimoH = Math.min(valorHtemp, valorminimoH);
+
+
+valorHH = (valorH - valorminimoH) * (100 - 0) / (valormaximoH - valorminimoH) + 0;
+//valor11 = 100*(valor1-8)/896;
+valorHH = valorHH.toFixed(2);
+
+
+document.getElementById("textH").innerHTML = valorH;
+
+document.getElementById("varH").innerHTML = variableH;
+
+progressBarH.setPercent(valorHH);
+
+
+        break;
+
+
+
+    case "X-":
+valor1 = sresult.substr(2, largo-2);
+test1 = valor1;
+variable1 = analog.substr(0, 1);
+
+valor1 = valor1.replace(/\D/g,'');
+
+valormaximo1temp = valor1;
+if(valormaximo1temp > valormaximo1){
+valormaximo1 = valormaximo1temp;
+}
+
+valorminimo1temp = valor1;
+if(valorminimo1temp < valorminimo1){
+valorminimo1 = valorminimo1temp;
+}
+
+
+valor11 = (valor1 - valorminimo1) * (100 - 0) / (valormaximo1 - valorminimo1) + 0;
+//valor11 = 100*(valor1-8)/896;
+valor11 = valor11.toFixed(2);
+
+
+
+
+document.getElementById("text1").innerHTML = test1;
+document.getElementById("var1").innerHTML = variable1;
+
+
+progressBar1.setPercent(valor11);
+        break;
+
+    case "Y-":
+valor2 = sresult.substr(2, largo-2);
+variable2 = analog.substr(0, 1);
+
+valor2 = valor2.replace(/\D/g,'');
+
+valormaximo2temp = valor2;
+if(valormaximo2temp > valormaximo2){
+valormaximo2 = valormaximo2temp;
+}
+
+valorminimo2temp = valor2;
+if(valorminimo2temp < valorminimo2){
+valorminimo2 = valorminimo2temp;
+}
+
+
+valor22 = (valor2 - valorminimo2) * (100 - 0) / (valormaximo2 - valorminimo2) + 0;
+//valor11 = 100*(valor1-8)/896;
+valor22 = valor22.toFixed(2);
+
+
+
+//document.getElementById("text1").innerHTML = valor11+" - "+valor1;
+document.getElementById("text2").innerHTML = valor2;
+//text1.html(valor11+" - "+valor1);
+document.getElementById("var2").innerHTML = variable2;
+//document.getElementById("vara1").innerHTML = valor1;
+
+progressBar2.setPercent(valor22);
+        break;
+
+case "Z:":
+valor3 = sresult.substr(2, largo-2);
+//valor3a = valor3;
+variable3 = analog.substr(0, 1);
+
+//valor3 = valor3.replace(/\D/g,'');
+
+//valor3 = valor3/multi;
+//valor3 = valor3-desfase;
+
+
+valor3temp = valor3;
+valormaximo3 = Math.max(valor3temp, valormaximo3);
+
+//if(valor3temp > valormaximo3){
+//valormaximo3 = valor3temp;
+//}	
+
+valor3temp = valor3;
+valorminimo3 = Math.min(valor3temp, valorminimo3);
+
+//valorminimo3temp = valor3;
+//if(valor3temp < valorminimo3){
+//valorminimo3 = valor3temp;
+//}
+
+
+valor33 = (valor3 - valorminimo3) * (100 - 0) / (valormaximo3 - valorminimo3) + 0;
+//valor11 = 100*(valor1-8)/896;
+valor33 = valor33.toFixed(2);
+
+
+
+//document.getElementById("text1").innerHTML = valor11+" - "+valor1;
+document.getElementById("text3").innerHTML = valorminimo3+" * "+valormaximo3;;
+//text1.html(valor11+" - "+valor1);
+document.getElementById("var3").innerHTML = valor33;
+//document.getElementById("vara1").innerHTML = valor1;
+
+progressBar3.setPercent(valor33);
+//setangle();
+        break;
+
+case "H:":
+valor4 = sresult.substr(2, largo-2);
+variable4 = analog.substr(0, 1);
+
+
+
+valor4temp = valor4;
+valormaximo4 = Math.max(valor4temp, valormaximo4);
+
+valor4temp = valor4;
+valorminimo4 = Math.min(valor4temp, valorminimo4);
+
+
+valor44 = (valor4 - valorminimo4) * (100 - 0) / (valormaximo4 - valorminimo4) + 0;
+//valor11 = 100*(valor1-8)/896;
+valor44 = valor44.toFixed(2);
+
+
+document.getElementById("text4").innerHTML = valor4;
+
+document.getElementById("var4").innerHTML = variable4;
+
+progressBar4.setPercent(valor44);
+
+setangle(valor44) 
+        break;
+}
+}
+
+
+
+
+
+
+ //
+
+//function draw() {
+ //
+
+//}
+
+</script>
+
+
+  </body>
+</html>

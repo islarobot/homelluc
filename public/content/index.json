@@ -1,0 +1,19 @@
+[
+ {
+  "title":"Basic Sensors",
+  "projects":
+  [
+   {"name":"Blink Test","file":"blinktest.ino"},
+   {"name":"Digital Switch","file":"digitalswitch.ino"}
+  ]
+ },
+
+ {
+  "title":"Basic Actuators",
+  "projects":
+  [ 
+   {"name":"Servo","file":"servo.ino"},
+   {"name":"Speaker","file":"speaker.ino"}
+  ]
+ }
+]

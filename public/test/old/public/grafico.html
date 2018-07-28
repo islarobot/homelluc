@@ -1,0 +1,123 @@
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        background-color: #111111;
+        color: #eeeeee;
+        font-family: tahoma, arial, sans-serif;
+        padding-left: 100px;
+      }
+      h4 {
+        margin-bottom: 1px;
+      }
+    </style>
+<script src="math.js" type="text/javascript"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script> 
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="//cdn.jsdelivr.net/p5.js/0.3.8/p5.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/p5.js/0.3.8/addons/p5.dom.js"></script>
+<script src="compass.js"></script>
+<script type="text/javascript" src="smoothie.js"></script>
+   
+</head>
+<body>
+
+    <h1>Gráfico</h1>
+
+    
+   <canvas id="mycanvas" width="1000" height="400"></canvas>
+	
+<table><tr><td>
+Valor: <div id="valor1"></div>
+</td></tr>
+<tr><td>
+Valor Max: <div id="valormax"></div>
+</td></tr>
+<tr><td>
+Valor Min: <div id="valormin"></div>
+</td></tr>
+</table>
+  </body>
+
+<script>
+var smoothie = new SmoothieChart({horizontalLines:[{color:'#ffffff',lineWidth:1,value:0},{color:'#880000',lineWidth:2,value:3333},{color:'#880000',lineWidth:2,value:-3333}]},{maxValue:5,minValue:-5,millisPerPixel:100,grid:{millisPerLine:10000,verticalSections:11},timestampFormatter:SmoothieChart.timeFormatter});
+smoothie.streamTo(document.getElementById("mycanvas"),100);
+
+// Data
+var line1 = new TimeSeries();
+var line2 = new TimeSeries();
+var line3 = new TimeSeries();
+
+var datamsg;
+
+// Add a random value to each line every second
+setInterval(function() {
+line1.append(new Date().getTime(), fx);
+line2.append(new Date().getTime(), ax);
+line3.append(new Date().getTime(), gx);
+}, 300);
+
+// Add to SmoothieChart
+
+//verde: filtro
+smoothie.addTimeSeries(line1,{lineWidth:2,strokeStyle:'#00ff00'}); 
+//rojo: acelerómetro
+smoothie.addTimeSeries(line2,{lineWidth:2,strokeStyle:'#ff0000'});
+//azul: giroscopio
+
+smoothie.addTimeSeries(line3,{lineWidth:2,strokeStyle:'#0015ff'});
+
+var socket = io();
+
+msgmax = 360;
+msgmin = 0;
+//recupera informacion del servicio node graficos.js
+socket.on('arduinopc', function(msg){
+largo = msg.length;
+
+pre = msg.substr(0,2);
+
+
+msg = msg.substr(3, largo-3);
+msg = parseFloat(msg);
+msgmax = Math.max(msg, msgmax);
+msgmin = Math.min(msg, msgmin);
+
+switch(pre){
+
+case "Ax":
+	
+ax = msg;
+break;
+
+case "Gx":
+
+gx = msg;
+break;
+
+case "Fx":
+
+fx = msg;
+break;
+
+}
+
+
+//line1.append(new Date().getTime(), msg);
+
+datamsg = msg;
+
+document.getElementById("valor1").innerHTML = msg;
+document.getElementById("valormax").innerHTML = msgmax;
+document.getElementById("valormin").innerHTML = msgmin;
+
+
+
+});
+
+</script>
+</html>

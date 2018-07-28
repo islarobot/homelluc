@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <script src="//cdn.jsdelivr.net/p5.js/0.3.8/p5.min.js"></script>
+ <script type="text/javascript" src="//cdn.jsdelivr.net/p5.js/0.3.8/addons/p5.dom.js"></script>
+       
+       
+        
+        <link rel="stylesheet" href="progress/css/lib/control/progressbar.css" />
+        <script type="text/javascript" src="progress/lib/control/progressbar.min.js"></script>
+    
+        <script type="text/javascript">
+
+
+
+ var text; // variable for the text div you'll create
+
+
+
+function setup() {
+   // make a new div and position it at 10, 10:
+   text = createDiv("Sensor reading:");
+   text.position(10,10);
+   // make a HTTP call to the server for the data:
+   var sensorReading = loadStrings("/data", showData);
+ }
+
+ function draw() {
+ }
+
+ function showData(result) {
+
+ var hola = 100*Math.random(); 
+   // when the server returns, show the result in the div:
+
+result1 = 100*(result-8)/896;
+   text.html(result1);
+  // text.html(hola);
+
+
+
+  // text.position(result, 10);
+   // make another HTTP call:
+   var sensorReading = loadStrings("/data", showData);
+}
+
+
+          //  var progressBar;
+
+           // window.onload = function(){
+
+             //   progressBar = new ProgressBar("my-progressbar", {'width':'100%', 'height':'3px'});
+            //    progressBar.setPercent(60);
+
+           // }
+
+        </script>
+        
+    </head>
+    
+    <body>
+  
+       
+    </body>
+</html>

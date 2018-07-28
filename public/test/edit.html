@@ -1,0 +1,60 @@
+<html>
+<head>
+<script>function alerta(){alert('File saved');}
+function closef(){
+document.getElementById("close").value = 1;
+document.getElementById("confirmationForm").submit();
+}
+function submitt(){
+document.getElementById("confirmationForm").submit();
+}
+function scripty(v){
+document.getElementById("scriptt").value = v;
+document.getElementById("editForm").submit();
+}
+</script>
+</head> 
+
+<body>
+<table>
+<tr><td>
+<form action="savefile" name="confirmationForm" id="confirmationForm" method="post">
+<textarea id="confirmationText" class="text" cols="86" rows="50" name="n1">
+
+</textarea>
+<input type="hidden" name="n2" value=1>
+<input type="hidden" name="closet" id="close" value=0>
+
+
+</form>
+</td>
+<td>
+<form action="editfile" name="editForm" id="editForm" method="post">
+<input type="hidden" name="scriptt" id="scriptt" value=0></form>
+<table>
+<tr>
+<td>
+<a href="javascript:scripty(1);">Basic Analog/Digital Sensors</a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="javascript:scripty(2);">Digital Switch</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<button onclick="submitt()">Save</button>
+</td>
+</tr>
+<tr>
+<td>
+<button onclick="closef()">Close</button>
+</td>
+</tr>
+</table>
+</td>
+</table>
+</body>
+</html>
